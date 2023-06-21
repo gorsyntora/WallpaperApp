@@ -47,23 +47,12 @@ class GalleryFragment : Fragment(), OnClickInterface {
         recyclerView = view.findViewById(R.id.recycler_gallery)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-     //   val mList = MutableList<ImageItem>(0, { ImageItem(null, -1) });
-     //   recyclerView.adapter = context?.let { ImageItemAdapter(it, mList, this) }
-
-
         val btn = view.findViewById<Button>(R.id.button)
         btn.setOnClickListener {
             val etxt = view.findViewById<EditText>(R.id.editTextTextPersonName)
             val str: String = etxt.text.toString()
             doRequest(str)
         }
-
-
-/*         model.hits?.observe(viewLifecycleOwner) {
-            Log.d("LIVEDATA", "Observer works")
-            val list = buildList(it)
-            recyclerView.adapter = context?.let { ImageItemAdapter(it, list, this) }
-        }*/
 
         listner = this
         val myModel = ViewModelProvider(requireActivity()).get(MyLiveData::class.java)
@@ -73,7 +62,6 @@ class GalleryFragment : Fragment(), OnClickInterface {
             val list = buildList(customList)
             recyclerView.adapter = context?.let { ImageItemAdapter(it, list, listner) }
         }
-
 
             val category = myModel.currentCategory
             doRequest(category)
@@ -102,7 +90,8 @@ class GalleryFragment : Fragment(), OnClickInterface {
         val pixabayApi = RetrofitObject.getClient().create(PixabayApi::class.java)
         CoroutineScope(Dispatchers.IO).launch {
 
-            val response = pixabayApi.getQuotes("37309411-fe5f3d44facc80b63b845c092", "$keyword", "photo")
+            val pixabayKey = "PIXABAY_KEY_HERE"
+            val response = pixabayApi.getQuotes("$pixabayKey", "$keyword", "photo")
             withContext(Dispatchers.Main) {
                 try {
                     if (response.isSuccessful) {
@@ -126,7 +115,6 @@ class GalleryFragment : Fragment(), OnClickInterface {
         }
 
     }
-
 
     override fun recylerviewOnClick(position: Int) {
 
